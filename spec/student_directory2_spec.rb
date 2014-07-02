@@ -1,51 +1,70 @@
 require 'student_directory2'
 
-describe  "Student Directory TDD Project" do 
-	context 'print header' do
-		it "prints header here" do
-			header = "The students of Makers Academy\n======================================="
-			expect(print_header).to eq header
-		end
-	end
+describe  "Student Directory TDD Project" do
 
-	 context 'print_footer' do
-	 	it "print footer here" do
-	 		footer = "Overall, we have #{student_list.length} great students"
-	 		expect(print_footer).to eq footer
-		end
-	end
-
-	context 'student_list' do
-		it "Create empty array" do
-			expect(student_list).to eq []
-		end
-	end
-
-	context 'student_name' do 
-		it "ask user for student name" do 
-		expect(student_name).to eq 'Alex'
-		end
-	end
-
-	context 'array_iteration' do 
-		it "print each name" do 
-		student_list.each do |student_list| end 
-		expect(array_iteration).to eq student_list
-		end
-	end
-	context 'student_cohort' do
-		it "ask student for cohort" do
-			expect(ask_for_cohort).to eq "What's your cohort?"
+		it "prints the header using p" do
+			expect(self).to receive(:p).with("The students of Makers Academy\n=======================================")
+			print_header
 		end
 
-		it 'inputs a cohort' do
+	 	it "prints the footer using p" do
+	 		expect(self).to receive(:p).with("Overall, we have #{student_list.length} great students")
+	 		print_footer
+		end
+
+	context "gets data for the directory by" do
+		it "asking student for name" do
+			expect(self).to receive(:p).with("What's the students name?")
+			student_name
+		end
+
+		it "accepting input for name" do
+			name = "Alex\n"
+			expect(self).to receive(:gets).and_return(name)
+			expect(input_name).to eq 'Alex'
+		end
+
+		it "asking student for their cohort" do
+			expect(self).to receive(:p).with("What's your cohort?")
+			ask_for_cohort
+		end
+
+		it 'accepting input for cohort' do
 			month = "June\n"
 			expect(self).to receive(:gets).and_return(month)
 			expect(input_month).to eq 'June'
 		end
 
+		it "asking for the student's favourite hobby" do
+			expect(self).to receive(:p).with("Please enter the student's favourite hobby")
+			ask_for_hobby
+		end
+
+		it "accepting input for hobby" do
+			hobby = "Coding\n"
+			expect(self).to receive(:gets).and_return(hobby)
+			expect(input_hobby).to eq "Coding"
+		end
+	
+	end
+
+	context "save student data by" do
+
+		it "adding information to student_list as a hash" do
+			name = "Alex"
+			cohort = "June"
+			hobby = "Coding"
+			expect(create_student(name, cohort, hobby)).to eq({name: "Alex", cohort: :June, hobby: :Coding})
+			alex = create_student(name, cohort, hobby)
+			add_student(alex)
+			expect(student_list).to eq [alex]
+		end
+
+	end
+
+	context 'student_cohort' do
 		it 'knows that June is a month' do
-			expect(month_exists?('june')).to be true
+			expect(month_exists?('June')).to be true
 		end
 
 		it 'knows that Bloom is not a month' do
@@ -58,4 +77,31 @@ describe  "Student Directory TDD Project" do
 			expect(input_month).to eq 'You entered the wrong month name!'
 		end
 	end
+
+	context 'Print the student info' do
+
+		it "as a list containing only the hash values and the student number" do
+			name = "Alex"
+			cohort = "June"
+			hobby = "Coding"
+			alex = create_student(name, cohort, hobby)
+			student_list << alex
+			student_list.each_with_index {|student, index|
+			expect(self).to receive(:p).with("#{index+1}. Alex (June cohort), Coding")}
+		print_students
+		end
+
+		it 'for students whose names begin with the letter A' do
+			student_list << [{name: "Alex", cohort: "June", hobby: "Coding"}, {name: "Dave", cohort: "June", hobby: "Coding"}]
+			expect(self).to receive(:p).with(student_list)
+			expect(select_students_starting_with_A).to eq("Alex, June, Coding")
+			select_students_starting_with_A		
+		end
+
+	end
 end
+
+#students.select {|student| "#{student[:name]}".start_with?("A")}
+
+
+
