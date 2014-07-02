@@ -4,6 +4,10 @@ def print_header
 	 p "The students of Makers Academy\n======================================="
 end
 
+def display_menu
+	print "Welcome to the Test-Driven Student Directory\n1. Enter student info\n2. Show the students\n3. Save students to students.csv\n4. Load students from students.csv\n9. Exit"
+end
+
 def print_footer
 	p "Overall, we have #{student_list.length} great students"
 end
@@ -42,12 +46,8 @@ def student_list
 	@students ||= []
 end
 
-def student_to_array(name, cohort, hobby)
-	student_list << {name: name, cohort: cohort, hobby: hobby}
-end
-
 def create_student(name, cohort, hobby)
-	{name: name, cohort: cohort.to_sym, hobby: hobby.to_sym}
+	student = {name: name, cohort: cohort.to_sym, hobby: hobby.to_sym}
 end
 
 def add_student(student)
@@ -60,7 +60,50 @@ def print_students
 	end
 end
 
-def select_students_starting_with_A
-	starts_with_A = student_list.select {|student| "#{student[:name]}".start_with?("A")}
-	starts_with_A.each {|student| puts "#{student[:name]}, #{student[:cohort]}, #{student[:hobby]}"}
+require 'csv'
+
+def student_to_csv(student)
+	student.values
 end
+
+def save_students(student_list)
+	CSV.open("./students.csv", "w") do |csv|
+		student_list.each do |student|
+			csv << student_to_csv(student)
+		end
+	end
+end
+
+def load_student_list
+	CSV.foreach('./students.csv') do |row|
+		loaded_student = create_student(row[0], row[1], row[2])
+		add_student(loaded_student)
+	end		
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,6 +2,8 @@ require 'student_directory2'
 
 describe  "Student Directory TDD Project" do
 
+		let(:student) {{name: "Eddie", cohort: :June, hobby: "snowboarding"}}
+
 		it "prints the header using p" do
 			expect(self).to receive(:p).with("The students of Makers Academy\n=======================================")
 			print_header
@@ -10,6 +12,11 @@ describe  "Student Directory TDD Project" do
 	 	it "prints the footer using p" do
 	 		expect(self).to receive(:p).with("Overall, we have #{student_list.length} great students")
 	 		print_footer
+		end
+
+		it 'displays the interactive menu' do
+			expect(self).to receive(:print).with("Welcome to the Test-Driven Student Directory\n1. Enter student info\n2. Show the students\n3. Save students to students.csv\n4. Load students from students.csv\n9. Exit")
+			display_menu
 		end
 
 	context "gets data for the directory by" do
@@ -45,6 +52,9 @@ describe  "Student Directory TDD Project" do
 			expect(self).to receive(:gets).and_return(hobby)
 			expect(input_hobby).to eq "Coding"
 		end
+
+		it "if name is left empty, direct to interactive menu" do
+		end
 	
 	end
 
@@ -55,11 +65,32 @@ describe  "Student Directory TDD Project" do
 			cohort = "June"
 			hobby = "Coding"
 			expect(create_student(name, cohort, hobby)).to eq({name: "Alex", cohort: :June, hobby: :Coding})
-			alex = create_student(name, cohort, hobby)
-			add_student(alex)
-			expect(student_list).to eq [alex]
+			Alex = create_student(name, cohort, hobby)
+			add_student(Alex)
+			expect(student_list).to eq [Alex]
 		end
 
+		it "converting student data to csv" do
+			expect(student_to_csv(student)).to eq ['Eddie', :June, 'snowboarding']
+		end
+
+		it "storing student data as a csv file" do
+			student_list = [student]
+			csv = double
+			expect(csv).to receive(:<<).with(student_to_csv(student))
+			expect(CSV).to receive(:open).with('./students.csv', 'w').and_yield(csv)
+			save_students(student_list)
+		end
+	end
+
+
+	context "Loads student data by" do
+
+		it "opening a csv file" do
+			csv = 'Eddie', :June, 'snowboarding'
+			expect(CSV).to receive(:foreach).with('./students.csv').and_yield(csv)
+			load_student_list
+		end
 	end
 
 	context 'student_cohort' do
@@ -89,13 +120,6 @@ describe  "Student Directory TDD Project" do
 			student_list.each_with_index {|student, index|
 			expect(self).to receive(:p).with("#{index+1}. Alex (June cohort), Coding")}
 		print_students
-		end
-
-		it 'for students whose names begin with the letter A' do
-			student_list << [{name: "Alex", cohort: "June", hobby: "Coding"}, {name: "Dave", cohort: "June", hobby: "Coding"}]
-			expect(self).to receive(:p).with(student_list)
-			expect(select_students_starting_with_A).to eq("Alex, June, Coding")
-			select_students_starting_with_A		
 		end
 
 	end
