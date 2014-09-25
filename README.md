@@ -1,4 +1,4 @@
-# Makers Academy Week 2
+### Makers Academy Week 2
 -----------
 
-## Remake of the Student Directory using test driven development
+#### Remake of the Student Directory using test driven development
