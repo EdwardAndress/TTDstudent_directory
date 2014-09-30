@@ -13,3 +13,21 @@
 ####Technologies used:
  * RSpec
  * Ruby
+ * Git
+
+####Set it up:
+```sh
+$ git clone https://github.com/EdwardAndress/makers_academy_week2.git
+```
+
+####Test it:
+```sh
+$ cd makers_academy_week2
+$ rspec
+```
+
+####Run it:
+```sh
+$ cd makers_academy_week2/lib
+$ ruby student_directory2.rb
+```
