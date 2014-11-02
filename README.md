@@ -1,4 +1,4 @@
-### Makers Academy Week 2: Student Directory rebuilt using TDD
+###[Makers Academy] Week 2: Student Directory rebuilt using TDD
 -----------
 
 ####Specification:
@@ -31,3 +31,4 @@ $ rspec
 $ cd makers_academy_week2/lib
 $ ruby student_directory2.rb
 ```
+[Makers Academy]: http://makersacademy.com
